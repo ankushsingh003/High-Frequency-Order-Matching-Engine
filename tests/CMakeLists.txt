@@ -11,4 +11,12 @@ add_executable(OrderBookTest OrderBookTest.cpp)
 target_link_libraries(OrderBookTest PRIVATE MatchingEngineCore GTest::gtest_main)
 
 include(GoogleTest)
-gtest_discover_tests(OrderBookTest)
+FetchContent_Declare(
+  benchmark
+  URL https://github.com/google/benchmark/archive/v1.8.3.zip
+)
+set(BENCHMARK_ENABLE_TESTING OFF CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(benchmark)
+
+add_executable(OrderBookBench Benchmark.cpp)
+target_link_libraries(OrderBookBench PRIVATE MatchingEngineCore benchmark::benchmark benchmark::benchmark_main)
