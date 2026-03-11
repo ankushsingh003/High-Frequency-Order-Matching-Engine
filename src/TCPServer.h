@@ -20,7 +20,7 @@ private:
             [this](std::error_code ec, tcp::socket socket) {
                 if (!ec) {
                     std::cout << "Client connected!" << std::endl;
-                    // In a real implementation: read orders asynchronously from the socket
+                    
                 }
                 do_accept();
             });

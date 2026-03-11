@@ -15,14 +15,14 @@ public:
 
     template <typename... Args>
     T* acquire(Args&&... args) {
-        if (freeCount_ == 0) return nullptr; // Pool exhausted
+        if (freeCount_ == 0) return nullptr; 
         T* obj = freeList_[--freeCount_];
-        new (obj) T(std::forward<Args>(args)...); // Placement new
+        new (obj) T(std::forward<Args>(args)...); 
         return obj;
     }
 
     void release(T* obj) {
-        obj->~T(); // Call destructor
+        obj->~T(); 
         freeList_[freeCount_++] = obj;
     }
 

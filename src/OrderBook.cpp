@@ -32,17 +32,17 @@ bool OrderBook::canFillCompletely(Side side, uint32_t price, uint32_t quantity) 
 }
 
 std::vector<Trade> OrderBook::addOrder(Order order) {
-    // If it's a FOK order, we must verify the liquidity exists upfront.
+    
     if (order.type == OrderType::FOK) {
         if (!canFillCompletely(order.side, order.price, order.quantity)) {
-            // Cancelled entirely, no trades
+            
             return {};
         }
-        // If we reach here, we know it can fill completely, so we process it like IOC.
+        
         order.type = OrderType::IOC; 
     }
 
-    // Allocate an order from the pool
+    
     Order* activeOrder = orderPool_.acquire(order.orderId, order.side, order.type, order.price, order.quantity);
     if (!activeOrder) {
         std::cerr << "CRITICAL: Order pool exhausted!" << std::endl;
@@ -51,13 +51,13 @@ std::vector<Trade> OrderBook::addOrder(Order order) {
 
     std::vector<Trade> trades = matchOrder(*activeOrder);
     
-    // If order is not fully filled, check its type before adding to the book
+    
     if (activeOrder->quantity > 0) {
         if (activeOrder->type == OrderType::IOC || activeOrder->type == OrderType::FOK) {
-            // Cancel remaining quantity (do not add to resting book)
+            
             orderPool_.release(activeOrder);
         } else {
-            // Limit order: Add resting quantity to the book
+            
             if (activeOrder->side == Side::Buy) {
                 bids_[activeOrder->price].push_back(activeOrder);
             } else {
@@ -65,7 +65,7 @@ std::vector<Trade> OrderBook::addOrder(Order order) {
             }
         }
     } else {
-        // Order fully filled, return to pool
+        
         orderPool_.release(activeOrder);
     }
     
@@ -81,7 +81,7 @@ std::vector<Trade> OrderBook::matchOrder(Order& order) {
             uint32_t bestAskPrice = askIt->first;
             
             if (bestAskPrice > order.price && order.type != OrderType::Market) {
-                break; // No more matching asks within limits
+                break; 
             }
 
             OrderList& ordersAtLevel = askIt->second;
@@ -96,14 +96,14 @@ std::vector<Trade> OrderBook::matchOrder(Order& order) {
                 
                 if (restingOrder->quantity == 0) {
                     ordersAtLevel.pop_front();
-                    orderPool_.release(restingOrder); // Return fully matched resting order to pool
+                    orderPool_.release(restingOrder); 
                 }
             }
             
             if (ordersAtLevel.empty()) {
                 askIt = asks_.erase(askIt);
             } else {
-                break; // Still quantity resting here
+                break; 
             }
         }
     } else {
@@ -112,7 +112,7 @@ std::vector<Trade> OrderBook::matchOrder(Order& order) {
             uint32_t bestBidPrice = bidIt->first;
             
             if (bestBidPrice < order.price && order.type != OrderType::Market) {
-                break; // No more matching bids within limits
+                break; 
             }
 
             OrderList& ordersAtLevel = bidIt->second;
@@ -127,7 +127,7 @@ std::vector<Trade> OrderBook::matchOrder(Order& order) {
                 
                 if (restingOrder->quantity == 0) {
                     ordersAtLevel.pop_front();
-                    orderPool_.release(restingOrder); // Return fully matched resting order to pool
+                    orderPool_.release(restingOrder); 
                 }
             }
             

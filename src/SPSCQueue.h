@@ -9,8 +9,8 @@ class SPSCQueue {
 public:
     explicit SPSCQueue(size_t capacity) 
         : capacity_(capacity), buffer_(capacity) {
-        // Capacity must be a power of 2 for fast modulo if we wanted, 
-        // but for simplicity we'll just use modulo operator.
+        
+        
     }
 
     bool push(const T& item) {
@@ -18,7 +18,7 @@ public:
         auto next_tail = (current_tail + 1) % capacity_;
         
         if (next_tail == head_.load(std::memory_order_acquire)) {
-            return false; // Queue is full
+            return false; 
         }
 
         buffer_[current_tail] = item;
@@ -30,7 +30,7 @@ public:
         auto current_head = head_.load(std::memory_order_relaxed);
         
         if (current_head == tail_.load(std::memory_order_acquire)) {
-            return false; // Queue is empty
+            return false; 
         }
 
         item = buffer_[current_head];
@@ -42,7 +42,7 @@ private:
     size_t capacity_;
     std::vector<T> buffer_;
     
-    // Align to cache lines to prevent false sharing
+    
     alignas(64) std::atomic<size_t> head_{0};
     alignas(64) std::atomic<size_t> tail_{0};
 };

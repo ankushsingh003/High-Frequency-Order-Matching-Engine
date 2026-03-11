@@ -9,8 +9,8 @@ enum class Side : uint8_t {
 enum class OrderType : uint8_t {
     Market,
     Limit,
-    IOC,    // Immediate-Or-Cancel
-    FOK     // Fill-Or-Kill
+    IOC,    
+    FOK     
 };
 
 struct Order {
@@ -20,7 +20,7 @@ struct Order {
     Side side;
     OrderType type;
 
-    // Intrusive pointers for zero-allocation doubly linked list
+    
     Order* prev = nullptr;
     Order* next = nullptr;
 

@@ -17,13 +17,13 @@ static void BM_OrderMatching(benchmark::State& state) {
     for (auto _ : state) {
         state.PauseTiming();
         OrderBook book;
-        // Pre-fill the book with 1000 asks
+        
         for (int i = 0; i < 1000; ++i) {
             book.addOrder(Order(orderId++, Side::Sell, OrderType::Limit, 100 + i, 10));
         }
         state.ResumeTiming();
 
-        // Add a crossing bid that sweeps the first 10 price levels
+        
         Order sweepOrder(orderId++, Side::Buy, OrderType::Limit, 110, 100);
         book.addOrder(sweepOrder);
     }

@@ -1,7 +1,7 @@
 #pragma once
 #include "Order.h"
 
-// A simple intrusive doubly linked list to avoid node allocations
+
 class OrderList {
 public:
     OrderList() : head_(nullptr), tail_(nullptr) {}
