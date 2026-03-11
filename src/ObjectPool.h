@@ -1,8 +1,9 @@
 #pragma once
 #include <vector>
 #include <cstdint>
+#include <concepts>
 
-template <typename T>
+template <std::destructible T>
 class ObjectPool {
 public:
     explicit ObjectPool(size_t size) : pool_(size), freeList_(size) {

@@ -2,8 +2,9 @@
 #include <atomic>
 #include <vector>
 #include <cassert>
+#include <concepts>
 
-template <typename T>
+template <std::default_initializable T>
 class SPSCQueue {
 public:
     explicit SPSCQueue(size_t capacity) 
