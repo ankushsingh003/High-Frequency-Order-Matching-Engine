@@ -1,12 +1,16 @@
 #pragma once
 #include "Order.h"
 #include "Trade.h"
+#include "ObjectPool.h"
+#include "OrderList.h"
 #include <map>
-#include <list>
 #include <vector>
 
 class OrderBook {
 public:
+    // Initialize with a pre-allocated pool size
+    OrderBook(size_t poolSize = 100000) : orderPool_(poolSize) {}
+
     // Adds an order and returns any trades generated
     std::vector<Trade> addOrder(Order order);
     
@@ -16,9 +20,12 @@ public:
 private:
     std::vector<Trade> matchOrder(Order& order);
 
+    ObjectPool<Order> orderPool_;
+
     // Bids (Buy orders): highest price first
-    std::map<uint32_t, std::list<Order>, std::greater<uint32_t>> bids_;
+    std::map<uint32_t, OrderList, std::greater<uint32_t>> bids_;
     
     // Asks (Sell orders): lowest price first
-    std::map<uint32_t, std::list<Order>, std::less<uint32_t>> asks_;
+    std::map<uint32_t, OrderList, std::less<uint32_t>> asks_;
 };
+

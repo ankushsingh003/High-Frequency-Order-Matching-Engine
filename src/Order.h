@@ -18,6 +18,12 @@ struct Order {
     Side side;
     OrderType type;
 
+    // Intrusive pointers for zero-allocation doubly linked list
+    Order* prev = nullptr;
+    Order* next = nullptr;
+
+    Order() = default;
     Order(uint64_t id, Side side, OrderType type, uint32_t price, uint32_t quantity)
         : orderId(id), price(price), quantity(quantity), side(side), type(type) {}
 };
+
