@@ -8,7 +8,9 @@ enum class Side : uint8_t {
 
 enum class OrderType : uint8_t {
     Market,
-    Limit
+    Limit,
+    IOC,    // Immediate-Or-Cancel
+    FOK     // Fill-Or-Kill
 };
 
 struct Order {

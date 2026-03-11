@@ -19,6 +19,7 @@ public:
 
 private:
     std::vector<Trade> matchOrder(Order& order);
+    bool canFillCompletely(Side side, uint32_t price, uint32_t quantity) const;
 
     ObjectPool<Order> orderPool_;
 
